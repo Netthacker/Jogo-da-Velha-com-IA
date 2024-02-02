@@ -9,6 +9,11 @@
 <body>
   <div class="container">
     <h1>Jogo da Velha</h1>
+    <p> Selecione a dificuldade:</p>
+    <button id="facil" class="radio radioChecked" onclick="changeState(1)">Fácil</button>
+    <button id="normal" class="radio" onclick="changeState(2)">Normal</button>
+
+
     <p id="current-player">1ª Jogada: X</p>
     <div id="board" class="board">
       <div class="cell" onclick="makeMove(0)"></div>

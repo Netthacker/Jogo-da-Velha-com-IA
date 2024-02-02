@@ -1,11 +1,30 @@
 let currentPlayer = 'X';
 let board = ['', '', '', '', '', '', '', '', ''];
 let gameActive = true;
+
+let buttonClicked = 1;
+
 const winPatterns = [
   [0, 1, 2], [3, 4, 5], [6, 7, 8],
   [0, 3, 6], [1, 4, 7], [2, 5, 8],
   [0, 4, 8], [2, 4, 6]
 ];
+
+//Funções de mudança dos botões
+function changeState(value){
+  buttonClicked = value
+  if(buttonClicked !== 1 ){
+    document.getElementById('normal').classList.add('radioChecked');
+    document.getElementById('facil').classList.remove('radioChecked');
+  }else{
+    document.getElementById('facil').classList.add('radioChecked');
+    document.getElementById('normal').classList.remove('radioChecked');
+  }
+}
+
+
+// Funções do jogo
+
 
 function makeMove(index) {
   if (gameActive && board[index] === '') {
@@ -114,27 +133,103 @@ function findBestMove() {
 
 
 function minimax(board, isMaximizing) {
- // Se houver um vencedor, retorna pontuação dependendo do jogador maximizador ou minimizador
+  // Função auxiliar para verificar se há um vencedor no tabuleiro
+  function checkWinner() {
+    for (const pattern of winPatterns) {
+      const [a, b, c] = pattern;
+      if (board[a] && board[a] === board[b] && board[a] === board[c]) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  // Se houver um vencedor, retorna pontuação dependendo do jogador maximizador ou minimizador
   if (checkWinner()) {
     return isMaximizing ? -1 : 1;
   }
+
   // Se o tabuleiro estiver cheio e não houver vencedor, retorna um empate (pontuação 0)
   if (board.every(cell => cell !== '')) {
     return 0;
   }
-  
-  // Lógica recursiva para calcular a pontuação para cada movimento possível
-    let bestScore = -Infinity;
-    for (let i = 0; i < board.length; i++) {
-      if (board[i] === '') {
-        // Simula uma jogada 'O' e chama recursivamente a função minimax para o próximo nível da árvore
-        board[i] = 'O';
-        const score = minimax(board, false);
-        //Desfaz a jogada simulada
-        board[i] = '';
-        // Atualiza o melhor escore com o máximo entre o escore atual e o melhor escore encontrado
-        bestScore = Math.max(score, bestScore);
+
+  /**
+   * Setando a dificuldade
+   */
+  if(buttonClicked === 2){
+
+    // Lógica recursiva para calcular a pontuação para cada movimento possível
+    if (isMaximizing) {
+      // Se for a vez do jogador maximizador ('O')
+      let bestScore = -Infinity;
+      for (let i = 0; i < board.length; i++) {
+        if (board[i] === '') {
+          // Simula uma jogada 'O' e chama recursivamente a função minimax para o próximo nível da árvore
+          board[i] = 'O';
+          const score = minimax(board, false);
+          // Desfaz a jogada simulada
+          board[i] = '';
+          // Atualiza o melhor escore com o máximo entre o escore atual e o melhor escore encontrado
+          bestScore = Math.max(score, bestScore);
+        }
       }
+      // Retorna o melhor escore encontrado
+      return bestScore;
+    } else {
+      // Se for a vez do jogador minimizador ('X')
+      let bestScore = Infinity;
+      for (let i = 0; i < board.length; i++) {
+        if (board[i] === '') {
+          // Simula uma jogada 'X' e chama recursivamente a função minimax para o próximo nível da árvore
+          board[i] = 'X';
+          const score = minimax(board, true);
+          // Desfaz a jogada simulada
+          board[i] = '';
+          // Atualiza o melhor escore com o mínimo entre o escore atual e o melhor escore encontrado
+          bestScore = Math.min(score, bestScore);
+        }
+      }
+      // Retorna o melhor escore encontrado
+      return bestScore;
     }
-    return bestScore;
+  }else{
+
+    // Lógica recursiva para calcular a pontuação para cada movimento possível
+    if (isMaximizing) {
+
+      let bestScore = Infinity;
+      for (let i = 0; i < board.length; i++) {
+        if (board[i] === '') {
+          // Simula uma jogada 'X' e chama recursivamente a função minimax para o próximo nível da árvore
+          board[i] = 'X';
+          const score = minimax(board, true);
+          // Desfaz a jogada simulada
+          board[i] = '';
+          // Atualiza o melhor escore com o mínimo entre o escore atual e o melhor escore encontrado
+          bestScore = Math.min(score, bestScore);
+        }
+      }
+      // Retorna o melhor escore encontrado
+      return bestScore;
+
+      
+    } else {
+      let bestScore = -Infinity;
+      for (let i = 0; i < board.length; i++) {
+        if (board[i] === '') {
+          // Simula uma jogada 'O' e chama recursivamente a função minimax para o próximo nível da árvore
+          board[i] = 'O';
+          const score = minimax(board, false);
+          // Desfaz a jogada simulada
+          board[i] = '';
+          // Atualiza o melhor escore com o máximo entre o escore atual e o melhor escore encontrado
+          bestScore = Math.max(score, bestScore);
+        }
+      }
+      // Retorna o melhor escore encontrado
+      return bestScore;
+    }
+
+  }
 }

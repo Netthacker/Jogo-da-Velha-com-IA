@@ -6,6 +6,10 @@ body {
     margin: 0;
     font-family: 'Arial', sans-serif;
   }
+
+  .di{
+    margin-top: 5px;
+  }
   
   .container {
     text-align: center;
@@ -21,7 +25,7 @@ body {
   .cell {
     width: 100px;
     height: 100px;
-    border: 1px solid #ccc;
+    border: 1px solid #c5c5c5;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -34,9 +38,27 @@ body {
   }
   
   button {
-    margin-top: 20px;
+    margin-top: 15px;
     font-size: 16px;
     padding: 10px;
     cursor: pointer;
   }
-  
+
+  .radio{
+    margin-top: 5px;
+    font-size: 16px;
+    color: #333;
+    padding: 8px;
+    border: 2px solid #333;
+    border-radius: 4px;
+    margin-bottom: 5px;
+    transition: background-color 0.3s color 0.3s;
+  }
+  .radioChecked{
+    font-size: 16px;
+    color: white;
+    background-color: #333;
+   
+  }
+
+
